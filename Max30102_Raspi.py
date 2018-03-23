@@ -352,8 +352,8 @@ class spo2Sensor (object):
         self.HR = (Samples[3]<<16) | (Samples[4]<<8) | Samples[5]
         self.HR = self.HR & 0x3FFFF
         
-        self.buffer_red = np.append(self.buffer_red,HR)
-        self.buffer_ir = np.append(self.buffer_ir, IR)
+        self.buffer_red = np.append(self.buffer_red,self.HR)
+        self.buffer_ir = np.append(self.buffer_ir, self.IR)
         
         self.buffer_red = self.buffer_red[-self.max_buffer_len:]
         self.buffer_ir = self.buffer_ir[-self.max_buffer_len:]
