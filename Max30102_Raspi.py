@@ -189,6 +189,9 @@ class spo2Sensor (object):
         self.buffer_ir = np.array([])
 
         self.newSample = False
+
+        self.HR = 0
+        self.IR = 0
         
     @property
     def red(self):
@@ -341,13 +344,13 @@ class spo2Sensor (object):
     def readSample(self):
         Samples = self.i2c.read_i2c_block_data(self.ADDRESS,self.FIFODATAREG,6)
        
-        HR = 0
-        IR = 0
+        self.HR = 0
+        self.IR = 0
 
-        IR = (Samples[0]<<16) | (Samples[1]<<8) | Samples[2]
-        IR = IR & 0x3FFFF
-        HR = (Samples[3]<<16) | (Samples[4]<<8) | Samples[5]
-        HR = HR & 0x3FFFF
+        self.IR = (Samples[0]<<16) | (Samples[1]<<8) | Samples[2]
+        self.IR = IR & 0x3FFFF
+        self.HR = (Samples[3]<<16) | (Samples[4]<<8) | Samples[5]
+        self.HR = HR & 0x3FFFF
         
         self.buffer_red = np.append(self.buffer_red,HR)
         self.buffer_ir = np.append(self.buffer_ir, IR)
