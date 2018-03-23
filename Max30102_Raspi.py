@@ -1,5 +1,6 @@
 from smbus2 import SMBus
 import numpy as np
+import time
 
 def _get_valid(d,value):
     try:
@@ -312,7 +313,7 @@ class spo2Sensor (object):
         return readPointer
     
     def getTemperature(self):
-        intg= _twos_complement(self.i2c.read_byte_data(self.ADDRESS, self.DIETEMPINT))
+        intg= self.i2c.read_byte_data(self.ADDRESS, self.DIETEMPINT)
         frac = self.i2c.read_byte_data(self.ADDRESS, self.DIETEMPFRAC)
         return intg + (frac*0.0625)
 
@@ -369,6 +370,8 @@ class spo2Sensor (object):
 
 
 sensor = spo2Sensor()
+sensor.clearFIFO()
 while 1:
-    print(sensor.getBuffer("Red"))
+    sensor.readSample()
+    print("HR:  ",sensor.HR,"   IR:  ",sensor.IR,"   TEMPERATURE:   ",sensor.getTemperature())
     time.sleep(0.2)
